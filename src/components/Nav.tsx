@@ -9,6 +9,7 @@ const Nav = () => {
   const links = [
     { text: 'Home', to: '/' },
     { text: 'About', to: '/about' },
+    { text: 'Attraction Selector', to: '/attraction-selector' },
   ]
 
   const activeClass = 'text-white bg-gray-900'
