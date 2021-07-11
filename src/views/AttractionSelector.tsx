@@ -16,7 +16,7 @@ const AttractionSelector = () => {
     loader
       .load()
       .then((google) => setGoogle(google))
-  })
+  }, [])
 
   return (
     <React.Fragment>

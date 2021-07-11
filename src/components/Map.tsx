@@ -8,34 +8,34 @@ interface Props {
 
 const Map = ({ google, zoom = 12, initCenter = { lat: 0, lng: 0 } }: Props) => {
 
-  const mapRef = useRef({} as HTMLDivElement);
+  const mapElementRef = useRef({} as HTMLDivElement);
+  const map = useRef<google.maps.Map>();
 
   const [currCenter, setCurrCenter] = useState(initCenter);
-  const [map, setMap] = useState<google.maps.Map>();
 
   useEffect(() => {
+    function getCurrentPos() {
+      if (!navigator || !navigator.geolocation) return
+      navigator.geolocation.getCurrentPosition((pos) => {
+        setCurrCenter({ lat: pos.coords.latitude, lng: pos.coords.longitude })
+      })
+    }
+
     document.getElementById('root')?.classList.add('flex-for-map');
     getCurrentPos();
-    setMap(new google.maps.Map(mapRef.current, {center: currCenter, zoom}))
+    map.current = new google.maps.Map(mapElementRef.current, {center: currCenter, zoom})
 
     return () => document.getElementById('root')?.classList.remove('flex-for-map');
   }, [])
 
   useEffect(() => {
-    if (map) {
-      map.panTo(currCenter)
+    if (map.current) {
+      map.current.panTo(currCenter)
     }
   }, [currCenter])
 
-  const getCurrentPos = (): void => {
-    if (!navigator || !navigator.geolocation) return
-    navigator.geolocation.getCurrentPosition((pos) => {
-      setCurrCenter({ lat: pos.coords.latitude, lng: pos.coords.longitude })
-    })
-  }
-
   return (
-    <div className="w-full h-full" ref={ mapRef }/>
+    <div className="w-full h-full" ref={ mapElementRef }/>
   );
 };
 
