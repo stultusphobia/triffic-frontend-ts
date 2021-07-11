@@ -1,37 +1,41 @@
 import React, { useState, useEffect, useRef } from 'react'
-import { Loader } from '@googlemaps/js-api-loader'
 
-const Map = () => {
+interface Props {
+  google: typeof google
+  zoom?: number,
+  initCenter?: { lat: number, lng: number }
+}
 
-  const map = useRef(null);
+const Map = ({ google, zoom = 12, initCenter = { lat: 0, lng: 0 } }: Props) => {
 
-  const loader = new Loader({
-    apiKey: "AIzaSyC6m1ftu1-HZGkirCXyvq55O1peRziwQI8",
-    version: "weekly",
-    libraries: ["places"]
-  });
-  
-  const mapOptions = {
-    center: {
-      lat: 0,
-      lng: 0
-    },
-    zoom: 4
-  };
+  const mapRef = useRef({} as HTMLDivElement);
+
+  const [currCenter, setCurrCenter] = useState(initCenter);
+  const [map, setMap] = useState<google.maps.Map>();
 
   useEffect(() => {
-    document.getElementById('root')!.classList.add('flex-for-map');
+    document.getElementById('root')?.classList.add('flex-for-map');
+    getCurrentPos();
+    setMap(new google.maps.Map(mapRef.current, {center: currCenter, zoom}))
 
-    loader
-      .load()
-      .then((google) => new google.maps.Map(map.current, mapOptions))
-      .catch(e => console.error(e));
-
-      return () => document.getElementById('root')!.classList.remove('flex-for-map');
+    return () => document.getElementById('root')?.classList.remove('flex-for-map');
   }, [])
 
+  useEffect(() => {
+    if (map) {
+      map.panTo(currCenter)
+    }
+  }, [currCenter])
+
+  const getCurrentPos = (): void => {
+    if (!navigator || !navigator.geolocation) return
+    navigator.geolocation.getCurrentPosition((pos) => {
+      setCurrCenter({ lat: pos.coords.latitude, lng: pos.coords.longitude })
+    })
+  }
+
   return (
-    <div className="w-full h-full" ref={map}/>
+    <div className="w-full h-full" ref={ mapRef }/>
   );
 };
 
