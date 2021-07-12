@@ -23,12 +23,10 @@ const Map = ({ google, zoom = 12, initCenter = { lat: 0, lng: 0 }, children }: P
       })
     }
 
-    document.getElementById('root')?.classList.add('flex-for-map');
     getCurrentPos();
-    map.current = new google.maps.Map(mapElementRef.current, { center, zoom });
+    map.current = new google.maps.Map(mapElementRef.current, { center, zoom, mapTypeControl: false });
     setMapIsReady(true);
 
-    return () => document.getElementById('root')?.classList.remove('flex-for-map');
   }, [])
 
   useEffect(() => {
