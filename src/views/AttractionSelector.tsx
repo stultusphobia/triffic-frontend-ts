@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { Loader } from '@googlemaps/js-api-loader'
 import Map from '../components/Map'
+import MapMarker from '../components/MapMarker'
 
 const AttractionSelector = () => {
 
@@ -21,7 +22,11 @@ const AttractionSelector = () => {
   return (
     <React.Fragment>
       <main className="flex-grow">
-        { googleapi.maps ? <Map google={googleapi}/> : <div />}
+        { googleapi.maps ? 
+        <Map google={googleapi}>
+          <MapMarker position={{ lat: 23.22, lng: 120.419 }}/>
+          <MapMarker position={{ lat: 23.22, lng: 120.319 }}/>
+        </Map> : <div />}
       </main>
     </React.Fragment>
   );
