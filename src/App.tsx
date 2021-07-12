@@ -3,9 +3,8 @@ import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
 
 import Nav from './components/Nav'
 
-import Home from './views/Home'
-import About from './views/About'
-import Map from './views/AttractionSelector'
+import views from './views'
+
 import NotFound from './views/NotFound'
 
 function App() {
@@ -13,15 +12,11 @@ function App() {
     <Router>
       <Nav />
       <Switch>
-        <Route exact path="/">
-          <Home />
-        </Route>
-        <Route path="/about">
-          <About />
-        </Route>
-        <Route path="/attraction-selector">
-          <Map />
-        </Route>
+        { views.map(view => (
+          <Route exact={view.exact} path={view.to} key={view.to}>
+            <view.component />
+          </Route>
+        )) }
         <Route>
           <NotFound />
         </Route>
