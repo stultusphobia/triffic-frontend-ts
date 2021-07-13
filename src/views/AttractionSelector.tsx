@@ -2,10 +2,11 @@ import React, { useState, useEffect } from 'react'
 import { Loader } from '@googlemaps/js-api-loader'
 import Map from '../components/Map'
 import MapMarker from '../components/MapMarker'
+import AttrFinder from '../components/AttrFinder'
 
 const AttractionSelector = () => {
 
-  const [googleapi, setGoogle] = useState({} as typeof google)
+  const [googleapi, setGoogleapi] = useState<typeof google>()
 
   const loader = new Loader({
     apiKey: "AIzaSyC6m1ftu1-HZGkirCXyvq55O1peRziwQI8",
@@ -16,17 +17,25 @@ const AttractionSelector = () => {
   useEffect(() => {
     loader
       .load()
-      .then((google) => setGoogle(google))
+      .then((google) => setGoogleapi(google))
   }, [])
 
-  return (
-    <React.Fragment>
-      <main className="flex-grow">
-        { googleapi.maps ? 
+  function renderComponents() {
+    return (
+      <React.Fragment>
         <Map google={googleapi}>
+          <AttrFinder google={googleapi} />
           <MapMarker position={{ lat: 23.22, lng: 120.419 }}/>
           <MapMarker position={{ lat: 23.22, lng: 120.319 }}/>
-        </Map> : <div />}
+        </Map>
+      </React.Fragment>
+    )
+  }
+  
+  return (
+    <React.Fragment>
+      <main className="relative flex-grow ">
+        { googleapi ? renderComponents() : null } 
       </main>
     </React.Fragment>
   );
