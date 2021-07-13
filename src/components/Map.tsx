@@ -1,54 +1,14 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React from 'react'
 
 interface Props {
-  google: typeof google
-  zoom?: number,
-  initCenter?: { lat: number, lng: number }
-  children?: React.ReactNode
+  mapElementRef: React.MutableRefObject<HTMLDivElement>
 }
 
-const Map = ({ google, zoom = 12, initCenter = { lat: 0, lng: 0 }, children }: Props) => {
-
-  const mapElementRef = useRef({} as HTMLDivElement);
-  const map = useRef<google.maps.Map>();
-
-  const [center, setCenter] = useState(initCenter);
-  const [mapIsReady, setMapIsReady] = useState(false);
-
-  useEffect(() => {
-    function getCurrentPos() {
-      if (!navigator || !navigator.geolocation) return
-      navigator.geolocation.getCurrentPosition((pos) => {
-        setCenter({ lat: pos.coords.latitude, lng: pos.coords.longitude })
-      })
-    }
-
-    getCurrentPos();
-    map.current = new google.maps.Map(mapElementRef.current, { center, zoom, mapTypeControl: false });
-    setMapIsReady(true);
-
-  }, [])
-
-  useEffect(() => {
-    if (map.current) {
-      map.current.panTo(center)
-    }
-  }, [center])
-
-  function renderChildren() {
-    if(!children) return
-
-    return React.Children.map(children, child => {
-      if (React.isValidElement(child))
-        return React.cloneElement(child, { google, map, center })
-    })
-  }
-
+const Map = ({ mapElementRef }: Props) => {
+  
   return (
-    <div className="w-full h-full" ref={ mapElementRef }>
-      { mapIsReady ? renderChildren() : null }
-    </div>
-  );
-};
+    <div className="w-full h-full" ref={mapElementRef} />
+  )
+}
 
-export default Map
+export default React.memo(Map)

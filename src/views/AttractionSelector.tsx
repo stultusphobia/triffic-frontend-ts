@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { Loader } from '@googlemaps/js-api-loader'
-import Map from '../components/Map'
+import MapWapper from '../components/MapWapper'
 import MapMarker from '../components/MapMarker'
 import AttrFinder from '../components/AttrFinder'
 
@@ -15,19 +15,17 @@ const AttractionSelector = () => {
   });
 
   useEffect(() => {
-    loader
-      .load()
-      .then((google) => setGoogleapi(google))
+    loader.load().then((google) => setGoogleapi(google))
   }, [])
 
-  function renderComponents() {
+  function render() {
     return (
       <React.Fragment>
-        <Map google={googleapi}>
-          <AttrFinder google={googleapi} />
+        <MapWapper google={googleapi}>
+          <AttrFinder />
           <MapMarker position={{ lat: 23.22, lng: 120.419 }}/>
           <MapMarker position={{ lat: 23.22, lng: 120.319 }}/>
-        </Map>
+        </MapWapper>
       </React.Fragment>
     )
   }
@@ -35,7 +33,7 @@ const AttractionSelector = () => {
   return (
     <React.Fragment>
       <main className="relative flex-grow ">
-        { googleapi ? renderComponents() : null } 
+        { googleapi ? render() : null } 
       </main>
     </React.Fragment>
   );
