@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { Loader } from '@googlemaps/js-api-loader'
 import MapWapper from '../components/MapWapper'
 import MapMarker from '../components/MapMarker'
+import MapSearchBox from '../components/MapSearchBox'
 import AttrFinder from '../components/AttrFinder'
 
 const AttractionSelector = () => {
@@ -23,8 +24,9 @@ const AttractionSelector = () => {
       <React.Fragment>
         <MapWapper google={googleapi}>
           <AttrFinder />
-          <MapMarker position={{ lat: 23.22, lng: 120.419 }}/>
-          <MapMarker position={{ lat: 23.22, lng: 120.319 }}/>
+          <MapSearchBox />
+          <MapMarker position={{ lat: 23.22, lng: 120.419 } as google.maps.LatLngLiteral}/>
+          <MapMarker position={{ lat: 23.22, lng: 120.319 } as google.maps.LatLngLiteral}/>
         </MapWapper>
       </React.Fragment>
     )
